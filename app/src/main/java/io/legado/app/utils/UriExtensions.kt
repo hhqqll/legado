@@ -185,10 +185,12 @@ fun Uri.inputStream(context: Context): Result<InputStream> {
             if (isContentScheme()) {
                 DocumentFile.fromSingleUri(context, uri)
                     ?: throw NoStackTraceException("未获取到文件")
+//                AppLog.put("----huhuhu----Uri.inputStream 1111111 :\n${ uri }")
                 return@runCatching context.contentResolver.openInputStream(uri)!!
             } else {
                 val path = RealPathUtil.getPath(context, uri)
                     ?: throw NoStackTraceException("未获取到文件")
+//                AppLog.put("----huhuhu----Uri.inputStream 222222 :\n${ path }")
                 val file = File(path)
                 if (file.exists()) {
                     return@runCatching FileInputStream(file)

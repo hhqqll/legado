@@ -9,12 +9,14 @@ import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
+import io.legado.app.constant.AppLog
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
 object FileUtils {
 
     fun createFileIfNotExist(root: File, vararg subDirFiles: String): File {
         val filePath = getPath(root, *subDirFiles)
+        AppLog.put("-----huhuhu-- FileUtils.createFileIfNotExist----filePath:\n${filePath}")
         return createFileIfNotExist(filePath)
     }
 

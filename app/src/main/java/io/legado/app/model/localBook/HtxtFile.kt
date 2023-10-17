@@ -17,7 +17,7 @@ import java.util.regex.Pattern
 import kotlin.math.min
 import io.legado.app.constant.AppLog
 
-class TextFile(private val book: Book) {
+class HtxtFile(private val book: Book) {
 
     companion object {
         private val padRegex = "^[\\n\\s]+".toRegex()
@@ -29,14 +29,14 @@ class TextFile(private val book: Book) {
 
         @Throws(FileNotFoundException::class)
         fun getChapterList(book: Book): ArrayList<BookChapter> {
-            return TextFile(book).getChapterList()
+            return HtxtFile(book).getChapterList()
         }
 
         @Synchronized
         @Throws(FileNotFoundException::class)
         fun getContent(book: Book, bookChapter: BookChapter): String {
             if (txtBuffer == null || bookUrl != book.bookUrl || bookChapter.start!! > bufferEnd || bookChapter.end!! < bufferStart) {
-//                AppLog.put("----huhuhu----TextFile.getContent 1111111 :\n${ book.bookUrl }")
+//                AppLog.put("----huhuhu----HtxtFile.getContent 1111111 :\n${ book.bookUrl }")
                 bookUrl = book.bookUrl
                 LocalBook.getBookInputStream(book).use { bis ->
                     bufferStart = bufferSize * (bookChapter.start!! / bufferSize).toInt()
@@ -56,7 +56,7 @@ class TextFile(private val book: Book) {
                     bis.skip(bookChapter.start!!)
                     bis.read(buffer)
                 }
-//                AppLog.put("----huhuhu----TextFile.getContent 22222 :\n${ bookChapter }")
+//                AppLog.put("----huhuhu----HtxtFile.getContent 22222 :\n${ bookChapter }")
             } else {
                 /** 章节内容在缓冲区内 */
                 txtBuffer!!.copyInto(
@@ -65,10 +65,10 @@ class TextFile(private val book: Book) {
                     (bookChapter.start!! - bufferStart).toInt(),
                     (bookChapter.end!! - bufferStart).toInt()
                 )
-//                AppLog.put("----huhuhu----TextFile.getContent 33333 :\n${ bookChapter }")
+//                AppLog.put("----huhuhu----HtxtFile.getContent 33333 :\n${ bookChapter }")
             }
 
-            AppLog.put("----huhuhu----TextFile.getContent 444444:\n${String(buffer, book.fileCharset())}")
+            AppLog.put("----huhuhu----HtxtFile.getContent 444444:\n${String(buffer, book.fileCharset())}")
 
             return String(buffer, book.fileCharset()).substringAfter(bookChapter.title)
                 .replace(padRegex, "　　")
@@ -106,7 +106,7 @@ class TextFile(private val book: Book) {
                 if (book.tocUrl.isBlank()) {
                     val blockContent = String(buffer, 0, length, charset)
                     book.tocUrl = getTocRule(blockContent)?.pattern() ?: ""
-                    AppLog.put("----huhuhu----TextFile.getChapterList tocUrl :\n${ book.tocUrl }")
+                    AppLog.put("----huhuhu----HtxtFile.getChapterList tocUrl :\n${ book.tocUrl }")
                 }
             }
         }

@@ -32,8 +32,15 @@ val Book.isLocal: Boolean
         return isType(BookType.local)
     }
 
+//val Book.isLocalTxt: Boolean
+//    get() = isLocal && originName.endsWith(".txt", true)
+
 val Book.isLocalTxt: Boolean
-    get() = isLocal && originName.endsWith(".txt", true)
+    get() {
+//        AppLog.put("huhuhu--Book.isLocalTxt--${originName}")
+        return isLocal && originName.endsWith(".txt", true)
+    }
+
 
 val Book.isEpub: Boolean
     get() = isLocal && originName.endsWith(".epub", true)
@@ -43,6 +50,9 @@ val Book.isUmd: Boolean
 
 val Book.isPdf: Boolean
     get() = isLocal && originName.endsWith(".pdf", true)
+
+val Book.isHtxt: Boolean
+    get() = isLocal && originName.endsWith(".htxt", true)
 
 val Book.isOnLineTxt: Boolean
     get() = !isLocal && isType(BookType.text)

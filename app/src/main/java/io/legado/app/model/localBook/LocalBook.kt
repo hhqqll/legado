@@ -45,6 +45,13 @@ object LocalBook {
     @Throws(FileNotFoundException::class, SecurityException::class)
     fun getBookInputStream(book: Book): InputStream {
         val uri = book.getLocalUri()
+        AppLog.put("----huhuhu----LocalBook.getBookInputStream 000000 :\n${ uri }")
+//        try {
+//            val division = 0 / 0
+//        } catch (e: ArithmeticException) {
+//            e.printStackTrace()
+//        }
+
         val inputStream = uri.inputStream(appCtx).getOrNull()
             ?: let {
                 book.removeLocalUriCache()
@@ -98,6 +105,10 @@ object LocalBook {
                 PdfFile.getChapterList(book)
             }
 
+            book.isHtxt -> {
+                HtxtFile.getChapterList(book)
+            }
+
             else -> {
                 TextFile.getChapterList(book)
             }
@@ -128,7 +139,14 @@ object LocalBook {
                     PdfFile.getContent(book, chapter)
                 }
 
+                book.isHtxt -> {
+                    AppLog.put("----huhuhu----LocalBook.getContent isHtxt  TextFile\n${book}")
+                    HtxtFile.getContent(book, chapter)
+                }
+
                 else -> {
+                    AppLog.put("----huhuhu----LocalBook.getContent  TextFile\n${book}")
+
                     TextFile.getContent(book, chapter)
                 }
             }
@@ -141,6 +159,13 @@ object LocalBook {
             content = content?.replace("&lt;img", "&lt; img", true) ?: return null
             return StringEscapeUtils.unescapeHtml4(content)
         }
+        AppLog.put("----huhuhu----LocalBook.getContent chapter:\n${chapter} content:\n${content}")
+        try {
+            val division = 0 / 0
+        } catch (e: ArithmeticException) {
+            e.printStackTrace()
+        }
+
         return content
     }
 
@@ -173,6 +198,7 @@ object LocalBook {
     fun importFile(uri: Uri): Book {
         val bookUrl: String
         //updateTime变量不要修改,否则会导致读取不到缓存
+        AppLog.put("----huhuhu----LocalBook.importFile  content:\n${uri}")
         val (fileName, _, _, updateTime, _) = FileDoc.fromUri(uri, false).apply {
             if (size == 0L) throw EmptyFileException("Unexpected empty File")
 
@@ -308,8 +334,10 @@ object LocalBook {
             if (deleteOriginal) {
                 if (book.bookUrl.isContentScheme()) {
                     val uri = Uri.parse(book.bookUrl)
+                    AppLog.put("----huhuhu----LocalBook.deleteBook 1111111 :\n${ uri }")
                     DocumentFile.fromSingleUri(appCtx, uri)?.delete()
                 } else {
+                    AppLog.put("----huhuhu----LocalBook.deleteBook 22222 :\n${ book.bookUrl }")
                     FileUtils.delete(book.bookUrl)
                 }
             }

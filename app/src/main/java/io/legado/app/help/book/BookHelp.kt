@@ -122,6 +122,10 @@ object BookHelp {
     ) {
         if (content.isEmpty()) return
         //保存文本
+        AppLog.put("-----huhuhu------BookHelp。saveText:\n${content}")
+        var e = Exception("this is a huhuhu saveText Exception");
+        e.printStackTrace();
+
         FileUtils.createFileIfNotExist(
             downloadDir,
             cacheFolderName,
@@ -320,17 +324,23 @@ object BookHelp {
      * 读取章节内容
      */
     fun getContent(book: Book, bookChapter: BookChapter): String? {
+//        var e = Exception("this is a huhuhu BookHelp.getContent Exception");
+//        e.printStackTrace();
+        AppLog.put("----huhuhu----BookHelp.getContent 000 bookChapter:\n${bookChapter}")
         val file = downloadDir.getFile(
             cacheFolderName,
             book.getFolderName(),
             bookChapter.getFileName()
         )
         if (file.exists()) {
+            AppLog.put("----huhuhu----BookHelp.getContent 333+ \n${file} \n${file.readText()}")
             return file.readText()
         }
         if (book.isLocal) {
             val string = LocalBook.getContent(book, bookChapter)
+            AppLog.put("----huhuhu----BookHelp.getContent 111 string:\n${string}")
             if (string != null && book.isEpub) {
+//                AppLog.put("----huhuhu----BookHelp.getContent 222 saveText")
                 saveText(book, bookChapter, string)
             }
             return string

@@ -225,6 +225,9 @@ class ExportBookService : BaseService() {
             ?: throw NoStackTraceException("创建文档失败，请尝试重新设置导出文件夹")
         contentResolver.openOutputStream(bookDoc.uri, "wa")?.use { bookOs ->
             getAllContents(book) { text, srcList ->
+                AppLog.put("----huhuhu----ExportBookService.export 00000 :\n${ bookDoc.uri }")
+                AppLog.put("----huhuhu----ExportBookService.export 1111111 :\n${ text }")
+                AppLog.put("----huhuhu----ExportBookService.export 2222 :\n${ srcList }")
                 bookOs.write(text.toByteArray(Charset.forName(AppConfig.exportCharset)))
                 srcList?.forEach {
                     val vFile = BookHelp.getImage(book, it.third)
